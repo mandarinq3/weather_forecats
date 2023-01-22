@@ -1,0 +1,81 @@
+.main{
+display: grid;
+place-items: center;
+position: relative;
+margin-top: 50px;
+
+  .sections-wrapper{
+    width: 750px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    
+    @media (max-width: 992px) {
+      width: 570px;
+      justify-items: center;
+    }
+    @media (max-width: 768px) {
+    }
+    @media (max-width: 576px) { 
+      width: 425px;
+    }    
+    @media (max-width: 430px) { 
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width: 90vw;
+    }  
+
+    .section{
+      margin: 5px;
+      border-radius: 10px;
+    }
+//main card section
+    .main-card-section{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      box-shadow: inset 0px 0px 10px white;
+      @media (max-width: 992px) {
+        width: 250px;
+      }
+    }
+
+//secondary card section
+    .secondary-card-section{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+      padding: 0px 5px;
+      box-shadow: inset 0px 0px 50px white;
+    @media (max-width: 992px) {
+      width: 350px;
+    }
+    @media (max-width: 768px) {
+      width: 300px;
+    }
+    @media (max-width: 576px) { 
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(6, 1fr);
+      width: 150px;
+    } 
+    @media (max-width: 430px) { 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90vw;
+      flex-wrap: wrap;
+      padding: 5px;
+     } 
+    }
+
+//weather icon bar section
+    .weather-icon-bar-section{
+      grid-column: 1 / span 2;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  }//sections-wrapper
+}
