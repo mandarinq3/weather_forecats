@@ -1,8 +1,6 @@
 .weather-icons-bar{
-  // background-color: grey;
-  background: linear-gradient(75deg, rgb(158, 158, 158), rgb(84, 212, 255),rgb(255, 213, 220));
-  width: 100%;
-  height: 60px;
+  background: linear-gradient(45deg, rgb(158, 158, 158), rgb(84, 212, 255),rgb(255, 213, 220));
+  min-height: 60px;
   padding: 5px;
   border-radius: 10px;
   @media (max-width: 436px) { 
@@ -16,33 +14,53 @@
     ul{
       width: 100%;
       height: 100%;
-      display: flex;
-      overflow-x: scroll;
+      display: grid;
+      grid-template-columns: repeat(6,1fr);
+      gap: 5px;
+      @media (max-width: 776px) { 
+        grid-template-columns: repeat(5,1fr);
+      } 
+      @media (max-width: 576px) { 
+        grid-template-columns: repeat(4,1fr);
+      } 
+      @media (max-width: 475px) { 
+        grid-template-columns: repeat(3,1fr);
+      } 
       
 //card
       li{
+        justify-self: center;
         width: 100px;
+        height: 60px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         border-radius: 5px;
-        padding: 0px 10px;
-        margin-right: 10px;
         scroll-snap-align: start;
+        box-shadow: inset 0px 0px 40px rgb(129, 127, 127);
+        overflow: hidden;
+        @media (max-width: 336px) { 
+          width: 80px;
+        } 
         
 // time
         span:nth-child(1){
           font-size: 14px;
-          height: 30%;
+          height: 40%;
           display: grid;
           place-items: center;
           color: white;
+          background:linear-gradient(
+              45deg, 
+            rgb(158, 158, 158), 
+            lightblue
+          ) ;
 
         }
 // temp
         span:nth-child(2){
           font-size: 20px;
-          height: 70%;
+          height: 60%;
           font-weight: bold;
           display: grid;
           place-items: center;

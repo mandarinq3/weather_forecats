@@ -100,28 +100,13 @@
             font-size: 18px;
           } 
       }
-// minimum temperature
+
+// feels like
       span:nth-child(3){
         background-color: yellow;
         border-radius: 10px;
         margin-top: 10px;
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-
-          @media (max-width: 992px) {
-            font-size: 12px;
-          }
-
-        b{
-            align-self: flex-end;
-        }
-      }
-// feels like
-      span:nth-child(4){
-        background-color: yellow;
-        border-radius: 10px;
-        margin-top: 10px;
+        padding: 3px;
         width: 100%;
         display: flex;
         justify-content: space-around;
@@ -142,14 +127,41 @@
       height: 20%;
       font-size: 12px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       text-align: justify;
       font-size: 16px;
       @media (max-width: 768px) {
         font-size: 13px;
       } 
+
+      
+
+      .sunrise,.sunset,.windspeed{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content:space-between;
+        height: 100%;
+        padding-top: 10px;
+        img{
+          width: 30px;
+          height: 30px;
+          opacity: 0.6;
+        }
+        b{
+          font-size: 13px;
+        }
+      }
+
+      .windspeed{
+        img{
+          width: 25px;
+          height: 25px;
+          transform: translateY(5px);
+          
+        }
+      }
     }
   }
 

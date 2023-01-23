@@ -1,54 +1,55 @@
+import { toJS } from 'mobx';
 import { nanoid } from 'nanoid'
 import React, { useEffect, useState } from 'react'
 import store from '../../store'
 import './weatherIconsBar.scss'
 
-export default function WeatherIconsBar(props) {
-  const [hours, setHours]=useState(null);
-  const currentTime = +new Date().toLocaleTimeString([], {hour: '2-digit'});
-  
+export default function WeatherIconsBar() {
+
+  const [cardDataList, setCardDataList]=useState( {time: [],temp: []});
+  const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit',minute: '2-digit'});
 
   useEffect(()=>{
-    (async()=>{
-      const result = [];
-      store.forecastData.hourly.time.forEach((time,i)=>{
-        if(i<24){
-          result.push({
-            time:new Date(time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
-            temp: Math.round(store.forecastData.hourly.temperature_2m[i]),
-            codes: store.forecastData.hourly.weathercode[i],
-          })
-        }
-      })
-      return result;
-    })()
-    .then((res)=>{
-      
-      
+    //copying hourly forecast object
+    let deepClone = JSON.parse(JSON.stringify(store.forecastData.hourly));
 
-        let countOfElements = 24-currentTime;
-        const hoursLeft = res.splice(currentTime+1,countOfElements);
-        const AllRestDayTemparatures=hoursLeft.map((item)=>{
-          return item.temp;
-        });
-        const currentHourForecast = res.splice(currentTime,1);
-              currentHourForecast[0].restDayMinTemp = Math.min.apply(null,AllRestDayTemparatures);
-        store.setCurrentWeather(currentHourForecast[0]);
-        setHours(hoursLeft);
+    //rounding float format of temperature 
+    deepClone.temperature_2m = deepClone.temperature_2m.map((temp)=>{
+      return Math.floor(temp)
     })
-  },[store.forecastData.hourly])
-  
+
+    //turning date array into time array
+    deepClone.time=deepClone.time.map((date)=>{
+     return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    })
+
+;
+
+    //finding start index to slice 168 el array into 12 elements
+    let startIndex = deepClone.time.indexOf(currentTime.substring(0,2)+':00')+1
+        
+
+    setCardDataList(
+      {
+        time: deepClone.time.splice( startIndex ,12),
+        temp: deepClone.temperature_2m.splice( startIndex ,12)
+      }
+    ) 
+
+    store.setCurrentWeather(deepClone);
+
+  },[])
 
   return (
     <div className='weather-icons-bar'>
       <div className='container'>
       <ul>
         {
-          hours?.map(
-            ({time,temp})=>{
+          cardDataList.time.map(
+            (time,i)=>{
             return <li key={nanoid()}>
                       <span>{time}</span>
-                      <span>{temp}°</span>
+                      <span>{cardDataList.temp[i]}°</span> 
                     </li>
             }
           )

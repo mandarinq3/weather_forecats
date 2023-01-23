@@ -53,9 +53,13 @@ function App() {
               store.getForecastData(res.latitude,res.longitude)
                 .then(
                   ({data})=>{
+
                     return {
                       daily:data.daily,
-                      hourly: data.hourly
+                      hourly: data.hourly,
+                      currentWindSpeed : data.current_weather.windspeed,
+                      sunrise: data.daily.sunrise[0],
+                      sunset: data.daily.sunset[0],
                     }
                   }
                 )

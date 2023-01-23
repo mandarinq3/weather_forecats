@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './mainCard.scss';
 import { observer } from "mobx-react-lite";
 import store from '../../store';
-import { condition, daysList, monthsList } from '../../constants';
+import { icons, daysList, monthsList } from '../../constants'; 
+import { toJS } from 'mobx';
+import sunset from "../../icons/sunset.png";
+import sunrise from "../../icons/sunrise.png";
+import wind from '../../icons/wind.png';
 
 function MainCard() {
-  const feelsLike = Math.floor(store.forecastData.daily.apparent_temperature_max[0]);
-  const code=store.currentWeather && store.currentWeather.codes ? store.currentWeather.codes : 0 ;
+  const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit',minute: '2-digit'});
+  const [sunriseTime,setSunriseTime] = useState('--:--');
+  const [sunsetTime,setSunsetTime] = useState('--:--')
+
+  
+  const [todayForecast,setTodayForecast] = useState(
+    {
+      code:0,
+      currentTemp:0,
+      minTemp:0,
+      feelsLike:0,
+    }
+  );
 
   const dt= new Date();
   const date = {
@@ -15,32 +30,72 @@ function MainCard() {
     currentDay: dt.getDay(),
   };
  
-  const forecast = condition.filter((item)=>{
-    return item.code.includes(code);
+
+  const icon = icons.filter((item)=>{
+    return item.code.includes(todayForecast.code);
   })
 
+  useEffect(() => {
+    const deepClone = JSON.parse(JSON.stringify(store.currentWeather));
+  
+    store.forecastData != null && setTodayForecast((prev)=>{
+      let startIndex = deepClone != null ? deepClone.time.indexOf(currentTime.substring(0,2)+':00') : '00:00';
+      let temperatures = deepClone !=null ? deepClone.temperature_2m.splice(0,12) : '--';
+      let min = temperatures != '--' ?  Math.min(...temperatures) : '--';
+      
+      return {
+        code:deepClone && deepClone.weathercode[startIndex],
+        currentTemp:deepClone && deepClone.temperature_2m[startIndex],
+        minTemp:min,
+        feelsLike: Math.round(store.forecastData.daily.apparent_temperature_max[0]),
+      };
+    })
+    setSunriseTime((prev)=>{
+      return store.forecastData != null ? new Date(store.forecastData.sunrise).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : prev
+    });
+
+    setSunsetTime((prev)=>{
+      return store.forecastData != null ? new Date(store.forecastData.sunset).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : prev
+    } 
+    );
+   
+
+  }, [])
+
+  
   return (
     <div className='main-card'>
       <div className='container'>
+
         <header>
             <span>{daysList[date.currentDay]}</span>
             <span>{monthsList[date.currentMonth]+' '+date.currentDate}</span>
         </header>
+
         <main>
           <div>
-            <span>{forecast[0].icon}</span>
+            <span>{icon[0].icon}</span>
           </div>
           <div>
-            <span>{store.currentWeather ? store.currentWeather.temp : '--'}°C</span>
-            <span>
-              {store.currentCityName}
-            </span>
-            <span>MIN:<b>{store.currentWeather ? store.currentWeather.restDayMinTemp : '--'}°C</b></span>
-            <span>FL: <b>{feelsLike}°C</b> </span>
+            <span>{todayForecast.currentTemp}°C</span>
+            <span>{store.currentCityName}</span>
+            <span>Feels Like: <b>{todayForecast.feelsLike}°C</b> </span>
           </div>
         </main>
+
         <footer>
-          <span>{forecast[0].description}</span>
+          <span className='windspeed'>
+              <img src={wind}/>
+              <b>{store.forecastData !=null && store.forecastData.currentWindSpeed ? Math.round(store.forecastData.currentWindSpeed) : '--'} km/h</b>
+            </span>
+            <span className='sunrise'>
+              <img src={sunrise}/> 
+              <b>{sunriseTime}</b>
+            </span>
+            <span className='sunset'>
+              <img src={sunset}/> 
+              <b>{sunsetTime}</b>
+            </span>
         </footer>
       </div>
     </div>

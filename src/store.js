@@ -18,7 +18,8 @@ setCurrentWeather(forecast){
 },
 
 getForecastData(lat,lon){
-  return axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max&timezone=auto`);
+  let URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,sunrise,sunset&current_weather=true&timezone=auto`;
+  return axios.get(URL);
 },
 
 getUserCoordinates (){
