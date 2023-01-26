@@ -1,4 +1,3 @@
-import { toJS } from 'mobx';
 import { nanoid } from 'nanoid'
 import React, { useEffect, useState } from 'react'
 import store from '../../store'
@@ -38,7 +37,7 @@ export default function WeatherIconsBar() {
 
     store.setCurrentWeather(deepClone);
 
-  },[])
+  },[currentTime])
 
   return (
     <div className='weather-icons-bar'>

@@ -13,9 +13,15 @@ export default function SecondaryCard(props) {
   return (
     <div className='secondary-card'>
       <div className='container'>
-        <span>{props.day}</span>
-        <span>{icon[0].icon}</span>
-        <span>{props.temp}°</span>
+        <div className='col col-left'>
+          <span className='day'>{props.day}</span>
+        </div>
+        
+        <div className='col col-right'>
+          <span className='icon'>{icon[0]!==undefined ? icon[0].icon : '--'}</span>
+          <span className='temperature'>{props.temp}°</span>
+        </div>
+        
       </div>
     </div>
   )

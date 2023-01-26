@@ -3,7 +3,7 @@ import './loadingStartPage.scss';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function LoadingStartPage() {
+export default function LoadingStartPage(props) {
   return (
     <div className='loading'>
           <div className='loading-wrapper'>
@@ -23,7 +23,9 @@ export default function LoadingStartPage() {
             <FontAwesomeIcon className="snow7" icon={faSnowflake}/>
             <FontAwesomeIcon className="snow8" icon={faSnowflake}/>
           </div>
-          <span className='loading-text'><b>Weather Forecast</b><br/>Please wait! Preparing forecast for you...</span>
+          <div className='loading-text'><b>Weather Forecast</b> 
+            <span>{props.text}</span>
+          </div>
       </div>
     </div>
 

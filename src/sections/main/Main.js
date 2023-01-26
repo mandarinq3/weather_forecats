@@ -22,7 +22,7 @@ function Main() {
           {
             store.forecastData.daily.weathercode.map((code,_i)=>{
               const dayNameIndex = new Date(store.forecastData.daily.time[_i]).getDay().toLocaleString();
-              if(_i!=0){
+              if(_i!==0){
                 return <SecondaryCard 
                         key={nanoid()} 
                         day={daysList[dayNameIndex]} 

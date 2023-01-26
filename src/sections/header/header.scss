@@ -109,6 +109,26 @@
       }
   }//logo
 
+  .user-location-btn{
+    background: white;
+    color: rgb(57, 163, 171);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    left: 50vw;
+    transform: translateX(-160px);
+    transition: all ease-out 0.2s;
+    z-index: 99999;
+    &:hover{
+      border-radius: 10%;
+    } 
+    @media (max-width: 768px) {
+      transform: translateX(-15px);
+     }
+  }
 
   .display{
       text-align: center;

@@ -1,5 +1,6 @@
 *,*::after,*::before {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body,html{
@@ -15,6 +16,7 @@ ul{
 
 .app{
   min-height: 100vh;
+  background: -o-linear-gradient(60deg,grey,  lightblue,pink,);
   background: linear-gradient(30deg,grey,  lightblue,pink,);
 }
 

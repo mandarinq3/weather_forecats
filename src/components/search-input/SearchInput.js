@@ -7,7 +7,7 @@ import { cities } from '../../constants';
 import store from '../../store';
 import './searchInput.scss';
 
-function SearchInput() {
+function SearchInput(props) {
   const inputRef = useRef();
   const listRef = useRef();
   const earthRef = useRef();
@@ -46,41 +46,31 @@ function SearchInput() {
         <ul ref={listRef} className={show ? 'show' : ''}>
           {
             filteredLocations.map((item, _k)=>{
-              return <li 
-              key={nanoid()}
-              onClick={()=>{
-                const city = {
-                  lat:item.latitude,
-                  lon:item.longitude,
-                  name:item.name
-                }
-                setShow(!show);
-                store.getForecastData(city.lat,city.lon)
-                  .then(({data})=>{
-                      return {
-                          daily:data.daily,
-                          hourly: data.hourly,
-                          currentWindSpeed : data.current_weather.windspeed,
-                          sunrise: data.daily.sunrise[0],
-                          sunset: data.daily.sunset[0],
-                      }
-                  })
-                  .then((data)=>{
-                      store.initializeForecastData(data);
-                      store.initializeCurrentCityName(city.name);
-                  });  
-              }}>{item.name}
+              return (
+              <li 
+                key={nanoid()}
+                onClick={()=>{
+                  const city = {
+                    latitude:item.latitude,
+                    longitude:item.longitude,
+                    name:item.name
+                  }
+                  setShow(!show);
+                  props.setCityNameAndForecast(city);
+                  window.localStorage.setItem(props.USER_LOCATION,JSON.stringify(city)) 
+                }}>{item.name}
               </li>
+              )
             })
           }
         </ul>
 
           <span 
-          className={ show ? 'earth-btn-label hideBtn' : 'earth-btn-label showBtn'} 
-          onClick={()=>{
-              setShow(!show);
-              inputRef.current.focus();
-          }}>
+            className={ show ? 'earth-btn-label hideBtn' : 'earth-btn-label showBtn'} 
+            onClick={()=>{
+                setShow(!show);
+                inputRef.current.focus();
+            }}>
           {store.currentCityName}
           </span>
         

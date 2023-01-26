@@ -149,6 +149,20 @@
             text-align: center;
             width: 100%;
           }
+
+          span{
+            width: 50%;
+            overflow-x: hidden;
+            white-space: nowrap;
+            text-transform: uppercase;
+            color: grey;
+            font-weight: bold;
+            transform: translateY(10px);
+            animation-name: typingText;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            text-align: center;
+          }
           
       }
     
@@ -164,3 +178,14 @@
   }
   
 }
+
+@keyframes typingText {
+  0%{
+   width: 0%;
+  }
+  100%{
+    width: 100%;
+  }
+  
+}
+

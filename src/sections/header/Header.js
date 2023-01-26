@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './header.scss';
 import SearchInput from '../../components/search-input/SearchInput';
-import { faRainbow } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faRainbow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { monthsList} from '../../constants';
+import { cities, monthsList} from '../../constants';
+import store from '../../store';
 
-export default function Header() {
+export default function Header(props) {
 
   const [currentTime, setCurrentTime] = useState('--:--');
   const [currentDate, setCurrentDate] = useState('');
@@ -14,10 +15,61 @@ export default function Header() {
   const dt= new Date();
   const date = dt.getDate();
   const monthIndex = dt.getMonth();
+
+const getAndSetUserLocation = () =>{
+  props.setLoading(true);
+  props.setLoadingText('Getting your location...')
+  
+    store.getUserCoordinates()
+    .then(
+      ({coords}) => {
+          return { lat:coords.latitude, lon:coords.longitude }
+      }
+    )
+
+    .then(({lat,lon})=>{
+        store.getUserCityName(lat,lon)
+          .then(
+            ({data})=>{
+              return {
+                  name: data.city, 
+                  longitude: data.longitude, 
+                  latitude: data.latitude 
+              }
+          })
+          .then((newCity)=>{ 
+            const existingCityNameList = cities.map(({name})=>{
+              return name
+            })
+            if(!existingCityNameList.includes(newCity.name)){
+                cities.push(newCity);
+            }
+            return newCity;
+          })
+          .then((location)=>{
+            const isConfirmed = window.confirm(`${location.name} is this your current location?`)
+            
+            if(isConfirmed){
+              props.setCityNameAndForecast(location);
+              window.localStorage.setItem(props.USER_LOCATION, JSON.stringify(location));
+            }            
+          })
+          //final
+          .then(()=>{
+                props.setLoading(false);
+                props.setLoadingText('Getting your location...')
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+}
  
 
   useEffect(()=>{
-    let i=0;
     let logoFlipInterval = setInterval(()=>{ setFlip(!flip) },5000);
     let timerInterval    = setInterval(()=>{
         let currentTime = new Date();
@@ -40,10 +92,7 @@ export default function Header() {
       clearInterval(timerInterval) 
     
     }
-  })
-
-
-
+  },[monthIndex, date, flip])
 
   return (
     <header className="header">
@@ -69,7 +118,13 @@ export default function Header() {
             weather forecast
           </span>
         </div>
-        <SearchInput/>
+        <div className="user-location-btn" onClick={getAndSetUserLocation}>
+          <FontAwesomeIcon icon={faLocationDot}/>
+        </div>
+        <SearchInput 
+          setCityNameAndForecast={props.setCityNameAndForecast} 
+          USER_LOCATION={props.USER_LOCATION}
+        />
 
         <div className='display'>
           <span className='date'>{currentDate}</span>

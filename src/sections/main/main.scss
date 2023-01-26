@@ -59,6 +59,7 @@ margin-top: 50px;
       grid-template-columns: 1fr;
       grid-template-rows: repeat(6, 1fr);
       width: 150px;
+      padding: 10px 0px;
     } 
     @media (max-width: 430px) { 
       display: flex;
@@ -77,5 +78,5 @@ margin-top: 50px;
       justify-content: center;
       width: 100%;
     }
-  }//sections-wrapper
+  }
 }
